@@ -1,0 +1,149 @@
+Gestion de la monnaie 
+- Création d'une monnaie
+- Distribution de la monnaie aux mineurs
+- Gestion input list
+- Gestion output list
+
+
+06/04/2024
+
+Compréhension du sujet copie/colle (les parties qui me concernent) avec le document réfépope.pdf:
+Minage:
+    - Il faut fixer une difficulter d (critère) 
+        - d zéros au début du hash du bloc courant dans sa représentation en ascii hexadécimal
+    - Minage = calcul du hash:
+        - Au départ: nonce = 0 inclus dans chaque bloc
+        - si le hash du bloc + nonce != dans    
+            - on recommence le calcul du hash
+    - Pas besoin de miner le premier bloc (genesis)
+
+Transaction:
+    - ex: "Asterix envoie 10 unités d'argent à Obelix"
+    - Créer une transaction = envoyer de l'argent. Il faut:
+        - Une adresse liée à 2 clés : publique (diffusée)  pour vérifier les signatures et secrètes (privée connu que par proprio) pour signer les transactions.
+        - chaque transaction = date (timestamp) et hash
+    - On vérifie quand on ajoute une nouvelle transaction que la signature est valide et que la structure des transaction et du nouveau bloc est valide
+
+    - Liste des transactions dans le bloc  
+        - Chaque transaction de la liste contient input list et output list    
+            - Une transaction fait apparaître des "avoirs" (l'argent) pas encore dépensés au profit du destinataire = UTXO
+            - Une transaction est alimentée par les UTXO (avoirs) non dépensés de l'émetteur, qui sont dépensés et disparaissent en tant qu'avoirs
+    - input list = références aux transactions non dépensées qui vont être utilisées pour payer le destinataire.
+
+    - Consommation de UTXO en input (via la input list)
+    - Production d'UTXO en sortie (via output list)
+    - UTXO input = UTXO output
+    - UTXO output héritente de la date e péremption et de la catégorie de la transaction
+
+    - Si le montant de la transaction est < à celui de l'UTXO utilisée, alos il faut générer une transaction de change de l'émetteur vers lui-même
+    - Toute transaction de sortie qui est une UTXO tant qu'elle n'est pas dépensée, est verrouillée par un script contenant la signature du proprio.
+        - Pour l'utiliser, il faut qu'il fournisse un script de déblocage.
+            - 2 scripts = une suite de commandes et de données écrites en notation polonaise inverse et interprétés avec une PILE
+
+    - Phase de marché : les outputs de chaque transaction sont : l'output de la transaction proprement dite + output de frais + output de change (si besoin)
+    
+Wallet:
+    - Il y a une liste globale de l'argent possédé par tous les utilisateurs
+    - Wallet = somme d'argent possédé par l'utilisateur (proprio du wallet) somme faite à partir de la liste global de l'argent possédé par la totalité des utilisateurs
+
+UTXO: 
+    - Verrouillée par un script de commandes contenant la signature du destinataire. 
+        - Construire un script de déverrouillage qui va vérifier que l'utilisateur est bien le bénéficiaire (comparaison de signature)
+        - Signature numérique avec des chaînes de caractères
+    - Déverrouillée en concatènant lock+unlock et on exécute de la gauche vers la droite avec une pile
+        - <Tx sign A><pubKey A> DUP HASH <H(pubKey A)> EQ VER
+Langage: 
+    - DUP : duplique le sommet de pile et l'empile
+    - EQ : dépile 2 fois en récupérant les valeurs et renvoie true si elle est égale, false sinon
+    - HASH : hash le sommet de pile, dépile, et empile le résultat
+    - VER : vérifie la signature. <tx sign X> et <pubKey Y> VER renvoie true si X = Y, false sinon
+    - <H(pubKey X)> : le hash de la clé publique de X. Comme on ne gère pas les clés on gardera la constante sous cette forme
+    - <tx sign X> : le hash de la transaction signé avec la clé privée de C. 
+    - <pubKey X> : la clé publique de X. 
+
+Script de verrouillage (lock) : <Tx sign A><pubKey A> DUP HASH
+
+Script de déverrouillage (unlock) : <H(pubKey A)> EQ VER
+
+Inputs: 
+    - hash de la ou les UTXO qui financent la dépense. Chacune contient un lock_script <Tx sign A><pubKey A> DUP HASH
+    - unlock_script <H(pubKey A)> EQ VER
+
+Outputs: 
+    - génére le lock_script <Tx sign B><pubKey B> DUP HASH
+    - action:
+        - exec pile lockunlock de A
+        - si ok supprimer ipur de utxoList et ajout output dans utxoList
+- Pour les récompenses: pas d'inpur, output avec lock_script de "state" (coinbase directement)
+
+
+Création de la monnaie:
+    - Création de la monnaie à chaque minage car c'est la récompense du mineur.
+    - Coinbase ("state") crée la monnaie en envoyant 50 BTC (montant qui peut évoluer dans le temps) aux mineurs.
+        - Créés ex-nihilo
+    - Tous les 210000 blocs la récompense est divisée par 2 (pour prévoir la fin de la création du Bitcoin car quantité limité)
+    - Lorsque la limite de création monétaire est atteinte, les mineurs seront récompensé que par les frais de transaction.
+    - Voix = 10³milliVoix
+
+
+
+CE QUE JE DOIS FAIRE (je crois que c'est que moi):
+P0
+    - Variables pour gérer les UTXO
+    - Structure de donnée poru les listes de transactions aves inputList et outputList
+    - Calcul du hash256 d'une transaction, d'une liste
+    - Minage des blocs (moi?)
+    - Générateur aléatoire de transactions
+P1    
+    - Mise à jour de la masse monétaire, comptes et soldes des users...etc avec intx et outtx mais sans récompense ni frais.
+    - Les soldes de tous les utilisateurs sont égal au nombre de candidats aux élections.  
+    - "State" à aussi nbCandidat Voix à la suite de la création du bloc genesis. 
+    - Mettre à jour les UTXO de la liste globale et des comptes
+P2    
+    - Générateur aléatoire de transactions entre 1 votant et un candidat pris au hasard avec un montant = 1 (les transactions sont incomplètes et one ne remplt que les champs: em, dest, montant, liste input des UTXO consommés)
+    - Défiler K transactions
+    - Compléter les tx défilées : ajout et suppression, timestamps, vérification des scripts, ajout des frais, du change, des outputList, gestion complète des UTXO
+    - Minage du bloc (moi?) 
+    - Mise à jour de la masse monétaire
+    - Mise à jour du montant de la récompense (si besoin)
+P3
+    - L'argent périmé et confisqué (dépassant le max de voies autorisées) est recyclé et attribué au "State" (évite la réduction de la masse monéataire)
+    - On utilise une file globale de transactions où les mineurs viennent lire des transactions en attente poru les traiter
+
+    - 1. Créer aléatoirement un nombre aléatoire de transactions unidirectionnels votant vers candidat aléatoire, avec un montant = 1.
+        (Je ne pense pas qu'on ai besoin de faire des catégories de transaction pour ce projet?)
+    - 2. Le mineur lit un nombre aléatoire de transactions dans la file
+    - 3. Pour chaque tx le "State" doit vérifier les dates, choisir les UTXO en vérifian tles scripts, vérifier les autorisations, calculer le change, les frais, la tx de récompense. 
+    - 4. Le mineur mine le bloc l'ajoute
+    - 5. Mise à jour de la masse monétaire et du montant de la récompense
+    - 6. Impression de diverses informations : numéro du cycle, information du nouveau bloc, masse monétaire, + évolutions des votes pour chaque candidats en clair => pour assurer la sécurité des votes
+
+Gestion des récompenses et de l'inflation:
+    int cycleRounds = 0; #nombre de cycles, tient compte du genesis
+    int limit = 30; #nombre de cycles entre 2 divisions de la récompence
+
+Ne pas oublier:
+    - Gestion de la liste globale des UTXO, mettre à jour les UTXO des comptes (ajout/suppression)
+    - Pour chaque nouvelle transaction (échange d'argent):
+        - Recherche dans la liste des UTXO une UTXO appartenant à l'émetteur et couvrant la dépense. S'il n'y en a pas, l'échange est refusé et on passe au suivant.
+        - Générer la tx pour gérer cet échange
+        - Dans la tx, générer la liste des inputs pointant chacune vers une des UTXO et générer les scripts de déverrouillage.
+        - Exécuter les scirpts au moyen d'une pile et vérifier la légitimité de l'émetteur
+        - Créer le nouveau bloc et ajouter cette transaction à sa liste de transactions
+        - Calculer les frais et ajouter une transaction poru les frfans dans la liste
+        - Gérer la récompense et l'inflation
+        - Miner le bloc et l'ajouter à la blockchain
+        - Supprimer de la liste des UTXO celles qu'on vient d'utiliser (mais elles restent dans la blockchain), ajouter les nouvelles à qui à le droit (personne car monnaie à usage unique, périme une fois le temps passé ou utilisée).
+
+
+07/04/2024
+
+Compréhension de la blockchain de base:
+
+Ce qu'il y a:
+
+Ce qu'il manque:
+
+Ce que je ne comprends pas:
+
+Ce que je dois faire:
