@@ -19,3 +19,7 @@ class Blockchain:
     def printUtxoList(self):
         for i in range(len(self.utxoList)):
             print(self.utxoList[i])
+
+    def createGenesisBlock(self, reward):
+        genesisTransactions = {}
+        tx = T

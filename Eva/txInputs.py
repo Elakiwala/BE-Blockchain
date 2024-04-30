@@ -15,6 +15,7 @@ class TxInputs:
     def print(self):
         print("--- Input List ---\n")
         print("Hauteur : "+ self.hauteur)
+        print(" ; hash : "+self.hash)
         print(" ; out index : "+self.outIndex)
         print(" ; unlock size : "+self.unlockSize)
         print(" ; unlock script : "+self.unlock_Script)
