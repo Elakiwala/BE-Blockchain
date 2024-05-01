@@ -1,0 +1,46 @@
+Sites webs fournis:
+
+
+Blockchain:
+	- Merkle trees
+		- https://www.youtube.com/watch?v=GaFuBrkkI_w
+		- https://www.codeproject.com/Articles/1176140/Understanding-Merkle-Trees-Why-use-them-who-uses-t
+		- https://www.youtube.com/watch?v=gUwXCt1qkBU&amp;list=WL&amp;index=31
+	- Mining:
+		- Systemes:
+			- http://www.cryptobadger.com/2017/04/build-ethereum-mining-rig-hardware/
+			- http://www.cryptobadger.com/2017/04/build-ethereum-mining-rig-linux/
+			- https://steemit.com/cryptocurrency/@cryptovest/i-configured-ubuntu-to-run-13-amd-gpus-on-asrock-h110-pro-btc-motherboard-finally
+			- https://steemit.com/
+		- http://www.righto.com/2014/02/bitcoin-mining-hard-way-algorithms.html
+		- https://bitcointalk.org/index.php?topic=1433925.0
+		- https://www.ledgerwallet.com/products/ledger-nano-s
+	- Python blockchain:
+		- https://github.com/flavien-hugs/blockchain
+		- https://github.com/ngocbh/voting-blockchain
+		- https://github.com/Usama-Tariq/Basics-Of-Blockchain-Python
+	- UTXO:
+		- https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch05.html
+		- https://blog.brakmic.com/bitcoin-internals-part-2/#:~:text=A%20Transaction%20Input%20is%20a,and%20an%20input%20sequence%20number.&amp;text=We%20remember%2C%20Bitcoin%20thinks%20in,from%20one%20address%20to%20another.
+		- https://blockgeeks.com/guides/learn-how-to-read-crypto-charts/
+		- https://developer.bitcoin.org/devguide/transactions.html
+		- https://learnmeabitcoin.com/technical/utxo
+	- YT:
+		- https://www.youtube.com/watch?v=Jt9MYcSsVzs
+		- https://www.youtube.com/watch?v=pYasYyjByKI
+		- https://www.youtube.com/watch?v=b41TVaLwhKc&amp;list=PLtCKS3CuBDYV_Vyl1ZH2Je8gSdXfQf4e3
+		- https://www.youtube.com/watch?v=qQIi7yjXAMI
+		- https://www.youtube.com/watch?v=5BUy14szfdg
+	- https://github.com/bitcoinbook/bitcoinbook/blob/develop/preface.adoc
+	- https://pypi.org/project/bitcoinlib/
+
+Applications de vote:
+	- Corporate Agora:
+		- https://www.agora.vote/technology
+	- ODP:
+		- https://democracy.earth/
+		- https://github.com/OpenProofOfHumanity
+	- https://documentation.heliosvoting.org/verification-specs/helios-v4
+	- https://people-vox.com/
+	- https://vooter.co/
+	- https://www.wechooz.fr/
