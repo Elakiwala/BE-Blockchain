@@ -17,7 +17,31 @@ class Transaction:
         self.nbJeton = 1
         self.timestamp = t.time()
         self.comment = comment
+
+    def setInputlist(self, InputL):
+        Inputlist = InputL
     
+    def setOutputlist(self, OutputL):
+        Outputlist = OutputL
+    
+    def getNbOutput(self):
+        return nbOutputs
+    
+    def setNbOutput(self, nb):
+        nbOutputs = nb
+
+    def setNbInptut(self, nb):
+        nbIntputs = nb
+    
+    def getNbInput(self):
+        return nbInputs
+    
+    def getInputList(self):
+        return Inputlist
+    
+    def getOutputList(self):
+        return Outputlist
+
     def getComment(self):
         print(self.comment)
 

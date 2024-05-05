@@ -14,6 +14,9 @@ class Block:
         self.nonce = 0
         self.blockHash = self.calcul_hash()
         
+    def getTransaction(self):
+        return self.transactions
+    
     def printBlock(self):
         print(f"Previous hash : {self.previous_hash}")
         print(f"Current hash : {self.blockHash}")

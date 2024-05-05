@@ -42,8 +42,42 @@ class Blockchain:
         self.majMasseMonetaire(reward)
         return nb
 
-    #def makeBlock pas compris aussi a quoi sa sert
-    
+    def makeBlock(self, index, txList, reward, miner): #c'est le mineur qui fait le block à partir d'une transaction entre 2 utilisateurs (votant-candidat ici) et l'ajout dans la blockchain après vérification
+        blockTransactions = []
+        listTransactionsFrais = []
+        nbTx = 2
+        for i in range(min(nbTx, len(txList))):
+            blockTransactions.append(0, txList[0])
+            txList.pop()
+        
+        previousHash = self.getLastBlock().getHash()
+
+        if reward > 0:
+            tx = Transaction("institution")
+            if tx.getNbOutput() != 0:
+                utxoList.append(tx.getOutputList()[0])
+            
+            tx.InstitutionTx(reward, miner)
+            for j in range(len(blockTransactions)):
+                txI = blockTransactions[j]
+                fees = txI.frais()
+                txFees = Transaction("frais")
+                txFees.setInputlist(txI.getInputList())
+                outTx = TxOutPut(0, "0", fees)
+                outTx.setHash(outTx.calcul_hash())
+                txFees.setOutputlist(txFees.getOutputList().append(outTx))
+                txFees.setNbInput(len(txFees.getInputList()))
+                txFees.setNbOutput(len(txFees.getOutputList()))
+                utxoList.append(txFees.getOutputList()[0])
+                listTransactionsFrais.append(0, txFees)
+            for txF in listTransactionsFrais:
+                blockTransactions.append(txF)
+            blockTransactions.append(0, tx)
+            self.majMasseMonetaire(reward)
+        nb = Block(index, previousHash, blockTransactions, miner)
+        nb.mineBlock(self.difficulte, miner)
+        return nb
+            
     def getLastBlock(self):
         return self.bc[-1]
     

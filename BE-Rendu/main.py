@@ -1,3 +1,4 @@
+import random
 from blockchain import*
 from block import *
 from txInPut import * 
@@ -7,16 +8,6 @@ from institution import *
 #On ajoute les vote (tx) et le minage des block
 #Verification de l integrite du vote numerique
 
-
-#Creation d'un blockchain
-#phase d'inflation
-    #1 - création de monnaie : helicopter money, openbar, c'est coinBase qui régale
-
-"""
-Création d'une blockchain:
-    - Block Genesis + ...etc
-    - 
-"""
 maxVotants = 100
 maxCandidats = 10
 maxMineurs = 10
@@ -31,6 +22,7 @@ difficulte = 4
 index = 1
 frais = 5
 reward = 8
+nbMaxBlock = 60
 #limit = 9
 #tourInflation = 1
 
@@ -50,3 +42,37 @@ for i in range(nb_votants):
         print("Masse monetaire 1 = ", blockchain.getMasseMonetaire())
     """
     index += 1
+
+#2 - phase de market. Pour notre situation on ne considère pas le nombre de block avant l'arret du marché mais le temps disponible pour voter (que l'on peut éventuellement représenter en nombre de blocs)
+
+for i in range(nbMaxBlock):
+    #nbTx = random()
+    nbTx = 33
+    for j in range(nbTx):
+        votant = random.randint(0, nb_votants)
+        candidat = random.randint(0, nb_candidats)
+        montant = 1
+        #pas besoin de faire de conversion
+        tx = Transaction("vote")
+        blockchain.utxolist = tx.marketTx(blockchain.utxolist, listeVotants[votant], listeCandidats[candidat], montant, frais)
+        Txfifo.append(tx)
+    
+    mineur = random.randint(0, nb_mineurs)
+    newBlock = blockchain.makeBlock(index, Txfifo, reward, listeMineurs[mineur])
+
+    for j in range(len(newBlock.getTransaction())):
+        if newBlock.getTransaction()[j] in Txfifo:
+            Txfifo.pop(j)
+    """
+    blockchain.addBlock(newBlock)
+    if (index+1) % limit == 0 & reward > 0:
+        reward /= 2
+        print("Reward = ", reward)
+        tourInflation += 1
+        print("Masse monetaire 2 = ", blockchain.getMasseMonetaire())
+    """
+    #est ce qu'on doit diviser la récompense dans notre cas? Je ne pense pas...
+    index += 1
+
+#Dump de la blockchain
+#JSON TODO @Robin
