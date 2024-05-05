@@ -21,12 +21,15 @@ class Block:
         print(f"Nb transactions : {self.nbTransactions}")
         print("Liste des tx : ")
         for tx in self.transactions:
-            tx.printTrans()
+            tx.printTransaction()
         #print("Merkle tree root : "+)
         print(f"Miner : {self.miner}")
         print(f"Nonce : {self.nonce}")
         print("------------------------------------------")
         
+    def getHash(self):
+        return self.blockHash
+
     def calcul_hash(self):
         block_string = str(self.index)+str(self.timestamp)+str(self.transactions)+str(self.previous_hash)+str(self.nonce)+str(self.miner)#+str(self.merkleRoot)
         return sha256(block_string.encode()).hexdigest()

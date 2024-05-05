@@ -1,10 +1,13 @@
 from block import *
+from transactions import *
+
+utxoList = []
 
 class Blockchain:
     def __init__(self,difficulte,reward):
         self.nbBlock = 1
         self.difficulte = difficulte
-        #self.utxolist TODO @EVA
+        self.utxolist =[]
         self.masse_monetaire = 0
         self.masse_jeton = 0
         self.bc = []
@@ -12,17 +15,33 @@ class Blockchain:
         
     def createGenesisBlock(self,reward):
         genesisTransactions = []
-        #Transactions tx = new Transactions("genesis");
-        #tx.coinbaseTx(reward, "Creator"); TODO @EVA
+        tx = Transaction("genesis")
+        tx.InstitutionTx(reward, "Creator")
         self.masse_monetaire += reward
-        #genesisTransactions.add(0,tx);
+        genesisTransactions.append(0,tx)
         newBlock = Block(0,"0",genesisTransactions,"Creator")
-        #utxoList.add(tx.lstOutputs.get(0)); TODO @EVA
+        utxoList.append(Outputlist[0])
         newBlock.mineBlock(self.difficulte,"Creator")
         return newBlock
     
-    #def helicopterMoney le prof en avait parler mais je n'ai pas bien compris l'utiliter
-    
+    def getMasseMonetaire(self):
+        return self.masse_monetaire
+
+    def majMasseMonetaire(self, montant):
+        self.masse_monetaire += montant
+        return self.masse_monetaire
+
+    def helicopterMoney(self, user, index, previousHash, reward, miner): #distribution du jeton aux votants de la part de l'institution
+        heliTransactions = []
+        tx = Transaction("helicopter")
+        tx.InstitutionTx(reward, user)
+        heliTransactions.append(0, tx) #add(index:0, tx) est ce que ça correspond à insert(0, tx)?
+        utxoList.append(tx.OutputList[0])
+        nb = Block(index, previousHash, heliTransactions, miner)
+        nb.mineBlock(self.difficulte, miner)
+        self.majMasseMonetaire(reward)
+        return nb
+
     #def makeBlock pas compris aussi a quoi sa sert
     
     def getLastBlock(self):
@@ -44,6 +63,6 @@ class Blockchain:
                 break
         return result
     
-    #ajouter un affichafe avec un json TODO @ROBIN
+    #ajouter un affichage avec un json TODO @ROBIN
     
     
