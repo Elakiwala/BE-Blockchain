@@ -52,7 +52,7 @@ class Block:
         if(self.blockHash == hashControl):
             return True
         else :
-            print("Block numero : {self.index} est un mauvais block.")
+            print(f"Block numero : {self.index} est un mauvais block.")
             return False
     
     #ajouter un affichafe avec un json TODO @ROBIN

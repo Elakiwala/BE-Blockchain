@@ -1,0 +1,34 @@
+BE TODOs (màj Eva) 06/05/2024
+
+- Modifier la boucle du main
+      x - boucler sur les utilisateurs
+      x - le nombre de transactions en tout peut varier de 0 à nb_votants      
+      x - le montant peut être 1 ou 0 (vote blanc)
+        
+- Faire fonctionner la limite en fonction du temps d'ouverture de la procédure de vote (et pas en fonction du nombre de bloc)
+- Demander à Robin si la valeur des primes doit évoluer avec le temps ou pas? 
+        Moi je ne pense pas puisqu'on a pas de nombre limiter de bloc créable
+
+x - Au lieu de faire une liste de mineurs on peut peut-être tirer aléatoirement un votant tant qu'il n'est pas celui qui est dans la transaction à vérifier
+
+@Robin ou @Eva
+- Mieux mettre en place la différence entre les jetons et les tokkens (dans la classe Institution, la masse monétaire et la masse jeton dans la blockchain et les blocks...etc)
+        - Faire le calcul du budget disponible pour l'Institution et qui doit reward les mineurs 
+
+
+
+Si toutes les modifications sont faites 
+Si le programme fonctionne (sans les arbres de Merkel)
+- Il faut maintenant fait les affichages en sortie pour permettre de suivre l'évolution du vote, et donc de savoir qui a voté pour qui et qui a gagner l'élection
+        - Utilisation du Wallet pour afficher à chaque nouveau block les soldes des votants, candidats, ainsi que les primes des mineurs
+                  - Terminer implémentation du Wallet (pas tout à fait compris comment ça fontionnait exactement par rapport à nos structures)
+        - Afficher aussi les block qui sont créer et surtout mettre en avant la transaction de la manière la plus claire possible
+
+
+TODOs fait (à peu près) màj Eva 06/05/2024:
+- Initialisation du programme
+- Initialisation du vote (à modifier)
+          - helicopter Money 
+- Transactions
+- TxInputs / TxOutputs structure
+- Mise en place du main

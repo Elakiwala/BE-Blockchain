@@ -1,5 +1,5 @@
 import time as t
-from blockchain import*
+#from blockchain import*
 from txInPut import*
 from txOutPut import*
 
@@ -9,8 +9,8 @@ Inputlist = []
 Outputlist = []
 
 class Transaction:
-    def __init__(self, comment):
-        #self.index = index
+    def __init__(self,index, comment):
+        self.index = index
         self.hash = ""
         #self.utilisateur = utilisateur
         #self.candidat = candidat
@@ -55,8 +55,7 @@ class Transaction:
         print(f"Output list : ")
         for i in range(len(Outputlist)):
             Outputlist[i].printOutputList()
-        print("Comment : ", end="")
-        self.getComment()
+        print(f"Comment : ", self.comment)
 
     def InstitutionTx(self, reward, user):
         outTx = TxOutPut(0, "0", reward)
@@ -73,7 +72,7 @@ class Transaction:
             montantInput += Inputlist[i].getMontant()
         return montantInput - montantOutput
     
-    def marketTx(self, UTXOlist, user, dest, montant, fraisPourcentage):
+    def voteTx(self, UTXOlist, user, dest, montant, fraisPourcentage):
         UTXOlistIn = []
         hashSourceTx = ""
         change = 0
@@ -81,7 +80,11 @@ class Transaction:
         sommeInputs = 0
 
         fees = montant * fraisPourcentage/100
-        for utxo in UTXOlist:
+
+    #On chercher toutes les utxos qui peuvent être utilisé pour justifier la source (Donc si je comprends bien, les utilisateurs ne possèdent pas réellement d'UTXO)
+    #Puisque tous les votants ont le même nombre d'utxo alors la boucle va toujours s'arrêter à 1 (normalement, ou bien à 2 puisqu'il y a les frais en plus...)
+    #Mais du coup je ne sais pas comment les Wallets peuvent fonctionner si on utilise la liste des UTXOs comme ça...
+        for utxo in UTXOlist: 
             sommeInputs += utxo.getMontant()
             UTXOlistIn.append(utxo)
             if sommeInputs >= montant + fees: break
@@ -89,10 +92,10 @@ class Transaction:
         change = sommeInputs - montant - fees
 
         for utxo in UTXOlistIn:
-            hashSourceTx = utxo.setHash()
+            hashSourceTx = utxo.getHash()
             montantEntree = utxo.getMontant()
 
-            Txin = TxInput(hashSourceTx, 0, montantEntree, "market tx")
+            Txin = TxInput(hashSourceTx, 0, montantEntree, "vote tx")
             Inputlist.append(Txin)
             UTXOlist.pop()
 
@@ -109,7 +112,11 @@ class Transaction:
         nbOutputs = len(Outputlist)
 
         UTXOlist.append(Txout)
-        UTXOlist.append(Txout)
+        UTXOlist.append(outChange)
+        
+# Le problème ici est qu'à aucun moment le "user" perd son UTXO, de même que le "dest" ne resoit jamais rien
+# Il faut trouver un moyen de créditer et débiter les UTXO de la liste et les attribuer (d'une manière nomminative ou autre)
+# Car dans le code Java les variables "user" et "dest" sont uniquement utilisé pour les vérifications (lock et unlock scripts)
         return UTXOlist
 
     def stringify(self):
@@ -117,5 +124,5 @@ class Transaction:
 
     
 
-#testTx = Transaction(1, "Test")
-#testTx.printTransaction()
+testTx = Transaction("Test")
+testTx.printTransaction()

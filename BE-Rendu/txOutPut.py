@@ -9,9 +9,9 @@ class TxOutPut:
 
     def printTxOutput(self):
         print(f"--- Output List ---")
-        print("Out Index : {self.outIndex}")
-        print("Hash : {self.hash}")
-        print("Montant : {self.montantSortie}")
+        print(f"Out Index : ", self.outIndex)
+        print(f"Hash : ", self.hash)
+        print(f"Montant : ", self.montantSortie)
 
     def calcul_hash(self):
         TxOut_string = str(self.outIndex)+str(self.montantSortie)
@@ -21,5 +21,8 @@ class TxOutPut:
     def getMontant(self):
         return self.montantSortie
     
+    def getHash(self):
+        return self.hash
+
     def setHash(self, hash):
         self.hash = hash

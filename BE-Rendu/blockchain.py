@@ -1,7 +1,7 @@
 from block import *
 from transactions import *
 
-utxoList = []
+#utxoList = []
 
 class Blockchain:
     def __init__(self,difficulte,reward):
@@ -20,7 +20,7 @@ class Blockchain:
         self.masse_monetaire += reward
         genesisTransactions.append(0,tx)
         newBlock = Block(0,"0",genesisTransactions,"Creator")
-        utxoList.append(Outputlist[0])
+        self.utxoList.append(Outputlist[0])
         newBlock.mineBlock(self.difficulte,"Creator")
         return newBlock
     
@@ -36,11 +36,14 @@ class Blockchain:
         tx = Transaction("helicopter")
         tx.InstitutionTx(reward, user)
         heliTransactions.append(0, tx) #add(index:0, tx) est ce que ça correspond à insert(0, tx)?
-        utxoList.append(tx.OutputList[0])
+        self.utxoList.append(tx.OutputList[0])
         nb = Block(index, previousHash, heliTransactions, miner)
         nb.mineBlock(self.difficulte, miner)
         self.majMasseMonetaire(reward)
         return nb
+
+    def getUTXOList(self):
+        return self.utxolist
 
     def makeBlock(self, index, txList, reward, miner): #c'est le mineur qui fait le block à partir d'une transaction entre 2 utilisateurs (votant-candidat ici) et l'ajout dans la blockchain après vérification
         blockTransactions = []
@@ -55,7 +58,7 @@ class Blockchain:
         if reward > 0:
             tx = Transaction("institution")
             if tx.getNbOutput() != 0:
-                utxoList.append(tx.getOutputList()[0])
+                self.utxoList.append(tx.getOutputList()[0])
             
             tx.InstitutionTx(reward, miner)
             for j in range(len(blockTransactions)):
@@ -68,7 +71,7 @@ class Blockchain:
                 txFees.setOutputlist(txFees.getOutputList().append(outTx))
                 txFees.setNbInput(len(txFees.getInputList()))
                 txFees.setNbOutput(len(txFees.getOutputList()))
-                utxoList.append(txFees.getOutputList()[0])
+                self.utxoList.append(txFees.getOutputList()[0])
                 listTransactionsFrais.append(0, txFees)
             for txF in listTransactionsFrais:
                 blockTransactions.append(txF)
