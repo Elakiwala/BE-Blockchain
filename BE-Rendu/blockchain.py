@@ -1,13 +1,13 @@
 from block import *
 from transactions import *
 
-#utxoList = []
+utxoList = []
 
 class Blockchain:
     def __init__(self,difficulte,reward):
         self.nbBlock = 1
         self.difficulte = difficulte
-        self.utxolist =[]
+        self.utxoList = utxoList
         self.masse_monetaire = 0
         self.masse_jeton = 0
         self.bc = []
@@ -20,7 +20,7 @@ class Blockchain:
         self.masse_monetaire += reward
         genesisTransactions.append(0,tx)
         newBlock = Block(0,"0",genesisTransactions,"Creator")
-        self.utxoList.append(Outputlist[0])
+        self.utxoList.append(tx.Outputlist[0])
         newBlock.mineBlock(self.difficulte,"Creator")
         return newBlock
     
@@ -31,19 +31,20 @@ class Blockchain:
         self.masse_monetaire += montant
         return self.masse_monetaire
 
-    def helicopterMoney(self, user, index, previousHash, reward, miner): #distribution du jeton aux votants de la part de l'institution
-        heliTransactions = []
-        tx = Transaction("helicopter")
-        tx.InstitutionTx(reward, user)
-        heliTransactions.append(0, tx) #add(index:0, tx) est ce que ça correspond à insert(0, tx)?
-        self.utxoList.append(tx.OutputList[0])
-        nb = Block(index, previousHash, heliTransactions, miner)
-        nb.mineBlock(self.difficulte, miner)
-        self.majMasseMonetaire(reward)
+    def helicopterMoney(self, users, index, previousHash, montant, miner): #distribution du jeton aux votants de la part de l'institution
+        for votant in users:
+            heliTransactions = []
+            tx = Transaction(1, "helicopter", "Institution", votant)
+            tx.InstitutionTx(montant, votant)
+            heliTransactions.append(0, tx) #add(index:0, tx) est ce que ça correspond à insert(0, tx)?
+            self.utxoList.append(tx.Outputlist[0])
+            nb = Block(index, previousHash, heliTransactions, miner)
+            nb.mineBlock(self.difficulte, miner)
+            self.majMasseMonetaire(montant)
         return nb
 
     def getUTXOList(self):
-        return self.utxolist
+        return self.utxoList
 
     def makeBlock(self, index, txList, reward, miner): #c'est le mineur qui fait le block à partir d'une transaction entre 2 utilisateurs (votant-candidat ici) et l'ajout dans la blockchain après vérification
         blockTransactions = []
@@ -57,21 +58,21 @@ class Blockchain:
 
         if reward > 0:
             tx = Transaction("institution")
-            if tx.getNbOutput() != 0:
-                self.utxoList.append(tx.getOutputList()[0])
+            if tx.nbOutputs != 0:
+                self.utxoList.append(tx.Outputlist[0])
             
             tx.InstitutionTx(reward, miner)
             for j in range(len(blockTransactions)):
                 txI = blockTransactions[j]
                 fees = txI.frais()
                 txFees = Transaction("frais")
-                txFees.setInputlist(txI.getInputList())
+                txFees.setInputList(txI.Inputlist)
                 outTx = TxOutPut(0, "0", fees)
                 outTx.setHash(outTx.calcul_hash())
-                txFees.setOutputlist(txFees.getOutputList().append(outTx))
-                txFees.setNbInput(len(txFees.getInputList()))
-                txFees.setNbOutput(len(txFees.getOutputList()))
-                self.utxoList.append(txFees.getOutputList()[0])
+                txFees.setOutputList(txFees.Outputlist.append(outTx))
+                txFees.setNbInput(len(txFees.Inputlist))
+                txFees.setNbOutput(len(txFees.Outputlist))
+                self.utxoList.append(txFees.Outputlist[0])
                 listTransactionsFrais.append(0, txFees)
             for txF in listTransactionsFrais:
                 blockTransactions.append(txF)

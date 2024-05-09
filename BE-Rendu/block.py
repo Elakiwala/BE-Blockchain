@@ -1,5 +1,6 @@
 import time as t
 from hashlib import sha256
+from transactions import *
 
 
 class Block:
@@ -24,7 +25,7 @@ class Block:
         print(f"Nb transactions : {self.nbTransactions}")
         print("Liste des tx : ")
         for tx in self.transactions:
-            tx.printTransaction()
+            tx.printTransaction() 
         #print("Merkle tree root : "+)
         print(f"Miner : {self.miner}")
         print(f"Nonce : {self.nonce}")

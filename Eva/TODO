@@ -32,3 +32,31 @@ TODOs fait (à peu près) màj Eva 06/05/2024:
 - Transactions
 - TxInputs / TxOutputs structure
 - Mise en place du main
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+TODOs @Eva 08/05/2024
+x - refaire le main avec les bonnes correction et en fonction de notre sujet
+x - Ajouter les fonctions si dessous qui sont appelées dans le main (certaines sont déjà faites) dans les différentes classes 
+        x - getSoldeUser(user) => Wallet 
+        x - getCandidat() => Transactions
+        x - getVotant() => Transactions
+        x - voteTx(blockchain.utxoList, votant, candidat, montant, frais) => Transactions
+        x - getTransaction() => Block
+        x - getHash() => Block
+        x - addBlock(block) => Blockchain
+        x - makeBlock(index, Txfifo, reward, mineur) => Blockchain
+        x - getLastBlock() => Blockchain
+        x - helicopterMoney(votant, index, previousHash, reward, mienur) => Blockchain
+- Ajouter les getters/setters dans les classes de structure (TxInputs, TxOutputs...etc)
+
+- Tester le programme
+
+
+
+
+TODOs tests!!!!!!!!!!!

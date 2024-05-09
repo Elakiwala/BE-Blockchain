@@ -1,12 +1,12 @@
 import random
-from transactions import *
-from blockchain import*
-from block import *
-from txInPut import * 
-from txOutPut import *
-from institution import *
+from transactions import Transaction
+from blockchain import Blockchain
+from block import Block
+from txInPut import TxInput
+from txOutPut import TxOutPut
+from institution import Institution
 from wallet import Wallet
-from wallet import *
+import time as t
 
 # ---------- VARIABLES GLOBALES ----------
 
@@ -23,7 +23,7 @@ indexT = 1
 frais = 5
 reward = 8
 duree = 2 # minutes
-
+initMoney = 1 + frais/100
 
 # ---------- 1) MISE EN PLACE ----------
 
@@ -36,7 +36,7 @@ for votant in listeVotants:
     dernierBlock = blockchain.getLastBlock()
     previousHash = dernierBlock.getHash()
     mineur = "Institution miner"
-    blockchain.addBlock(blockchain.helicopterMoney(votant, index, previousHash, reward, mineur)) # Pour tous les votants mettre 1 si le votant veut voter ou -1 si abstention (certainement à faire autrement...)
+    blockchain.addBlock(blockchain.helicopterMoney(votant, index, previousHash, initMoney, mineur)) # Pour tous les votants mettre 1 si le votant veut voter ou -1 si abstention (certainement à faire autrement...)
     index+=1
 
 # ---------- 2) PHASE DE VOTE ----------
@@ -62,7 +62,7 @@ while vote < nb_votants | t.time() - duree <= start: # tous les votants ont vot�
         Txfifo.append(tx)
         indexT += 1
         # Effectuer le vote/transaction
-        blockchain.utxolist = tx.voteTx(blockchain.utxolist, listeVotants[votant], listeCandidats[candidat], montant, frais)
+        blockchain.utxoList = tx.voteTx(blockchain.utxoList, listeVotants[votant], listeCandidats[candidat], montant, frais)
     
     # Un mienur doit faire la vérification du vote
     mineur = random.randint(1, nb_votants - 1)
@@ -91,8 +91,8 @@ for votant in listeVotants:
     if wallet.getSoldeUser(votant) == 0: # Le votant a voté un candidat
         for block in blockchain:
             for tx in block.getTransaction():
-                if tx.getVotant() == votant:
-                    print(f"", votant, " a voté pour ", tx.getCandidat())
+                if tx.getUser() == votant:
+                    print(f"", votant, " a voté pour ", tx.getDest())
                     break
             break
     elif wallet.getSoldeUser(votant) == -1:
@@ -111,3 +111,7 @@ for candidat in listeCandidats:
     if maxVote < solde: maxVote, gagnant = solde, candidat
 
 print(f"Le gagnant des élections est ", gagnant, " avec ", solde, " voies !")
+
+
+
+#JSON TODO @Robin
