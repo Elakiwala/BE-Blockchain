@@ -10,7 +10,7 @@ class Block:
         self.timestamp = t.time()
         self.transactions = transactions
         self.nbTransactions = len(self.transactions)
-        #self.merkleRoot(self.transactions) TODO @Souad
+        self.merkle_tree(self.transactions) #à check ( voir commentaire en bas)
         self.miner = miner
         self.nonce = 0
         self.blockHash = self.calcul_hash()
@@ -60,4 +60,32 @@ class Block:
     
     #ajouter verification merkle tree
     
-    #MERKLE TREE TODO @SOUAD
+    def merkle_tree(tx_list):
+        count = 0
+        hash_list = []
+
+        for tx in tx_list:
+            hash_elt = HashUtil.apply_sha256(tx.stringify())
+            hash_list.append(hash_elt)
+
+        count += len(hash_list)
+        hash_tree = list(hash_list)
+
+        while len(hash_list) > 1:
+            if len(hash_list) % 2 == 1:
+                hash_list.append(hash_list[-1])
+                hash_tree.append(hash_tree[-1])
+
+            hash_list2 = []
+            for i in range(0, len(hash_list), 2):
+                new_hash = HashUtil.apply_sha256(hash_list[i] + hash_list[i+1])
+                hash_list2.append(new_hash)
+                hash_tree.insert(0, new_hash)
+                count += 1
+
+            hash_list = hash_list2
+
+        merkle_root = hash_tree[0]
+
+        return merkle_root
+    #execution avec python3 block.py ne crash pas donc c'est bon ? ( à verifier transactions.py)
