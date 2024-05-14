@@ -1,16 +1,18 @@
 import time as t
+import datetime
 from hashlib import sha256
 from transactions import *
+import json
 
 
 class Block:
     def __init__(self, index, previous_hash, transactions, miner):
         self.index = index
         self.previous_hash = previous_hash
-        self.timestamp = t.time()
+        self.timestamp = datetime.datetime.fromtimestamp(t.time()).strftime('%Y-%m-%d %H:%M:%S')
         self.transactions = transactions
         self.nbTransactions = len(self.transactions)
-        self.merkle_tree(self.transactions) #à check ( voir commentaire en bas)
+        self.merkleRoot = self.merkle_tree(self.transactions)
         self.miner = miner
         self.nonce = 0
         self.blockHash = self.calcul_hash()
@@ -26,7 +28,7 @@ class Block:
         print("Liste des tx : ")
         for tx in self.transactions:
             tx.printTransaction() 
-        #print("Merkle tree root : "+)
+        print(f"Merkle tree root : {self.merkleRoot}")
         print(f"Miner : {self.miner}")
         print(f"Nonce : {self.nonce}")
         print("------------------------------------------")
@@ -56,16 +58,20 @@ class Block:
             print(f"Block numero : {self.index} est un mauvais block.")
             return False
     
-    #ajouter un affichafe avec un json TODO @ROBIN
+    def verifyMerkleTree(self):
+        merkleRootControl = self.merkle_tree(self.transactions)
+        if(self.merkleRoot == merkleRootControl):
+            return True
+        else:
+            print(f"Block numero : {self.index} a un mauvais merkkle tree")
+            return False
     
-    #ajouter verification merkle tree
-    
-    def merkle_tree(tx_list):
+    def merkle_tree(self,tx_list):
         count = 0
         hash_list = []
 
         for tx in tx_list:
-            hash_elt = HashUtil.apply_sha256(tx.stringify())
+            hash_elt = sha256(tx.stringify().encode()).hexdigest()
             hash_list.append(hash_elt)
 
         count += len(hash_list)
@@ -78,14 +84,28 @@ class Block:
 
             hash_list2 = []
             for i in range(0, len(hash_list), 2):
-                new_hash = HashUtil.apply_sha256(hash_list[i] + hash_list[i+1])
+                new_hash = sha256(hash_list[i] + hash_list[i+1].encode()).hexdigest()
                 hash_list2.append(new_hash)
                 hash_tree.insert(0, new_hash)
                 count += 1
 
             hash_list = hash_list2
-
-        merkle_root = hash_tree[0]
-
+        if len(hash_tree) > 0:
+            merkle_root = hash_tree[0]
+        else :
+            merkle_root = ""
         return merkle_root
-    #execution avec python3 block.py ne crash pas donc c'est bon ? ( à verifier transactions.py)
+    
+    def to_json(self, fileName):
+        block_json = {
+            "index": self.index,
+            "previous_hash": self.previous_hash,
+            "timestamp": self.timestamp,
+            "nbTransactions": self.nbTransactions,
+            "merkleRoot": self.merkleRoot,
+            "miner": self.miner,
+            "nonce": self.nonce,
+            "blockHash": self.blockHash
+        }
+        with open(fileName, 'a') as file:
+            json.dump(block_json, file, indent=4)

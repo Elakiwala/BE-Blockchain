@@ -1,0 +1,11 @@
+{
+    "index": 1,
+    "previous_hash": "0",
+    "timestamp": "2024-05-14 18:04:03",
+    "transactions": [],
+    "nbTransactions": 0,
+    "merkleRoot": "",
+    "miner": "Other",
+    "nonce": 34727,
+    "blockHash": "0000209a9534a2b6df24e6694e72b95ade716271fb0d538e75e27dfc042a189e"
+}

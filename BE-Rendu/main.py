@@ -23,7 +23,7 @@ indexT = 1
 frais = 5
 reward = 8
 duree = 2 # minutes
-initMoney = 1 + frais/100
+initMoney = 1 + frais/ maxVotants
 
 # ---------- 1) MISE EN PLACE ----------
 

@@ -11,17 +11,26 @@ class Blockchain:
         self.masse_monetaire = 0
         self.masse_jeton = 0
         self.bc = []
+        self.createLog()
         self.bc.append(self.createGenesisBlock(reward))
         
+    def createLog(self):
+        blockchainInfo = {
+            "difficulte" : self.difficulte
+        }
+        with open("./Json/logMineur.json", 'w') as file:
+            json.dump(blockchainInfo, file, indent=4)
+            
     def createGenesisBlock(self,reward):
         genesisTransactions = []
-        tx = Transaction("genesis")
+        tx = Transaction(0,"genesis","Creator","Creator")
         tx.InstitutionTx(reward, "Creator")
         self.masse_monetaire += reward
-        genesisTransactions.append(0,tx)
+        genesisTransactions.insert(0,tx)
         newBlock = Block(0,"0",genesisTransactions,"Creator")
         self.utxoList.append(tx.Outputlist[0])
         newBlock.mineBlock(self.difficulte,"Creator")
+        self.ajoutLog("Creator",0,reward)
         return newBlock
     
     def getMasseMonetaire(self):
@@ -80,8 +89,18 @@ class Blockchain:
             self.majMasseMonetaire(reward)
         nb = Block(index, previousHash, blockTransactions, miner)
         nb.mineBlock(self.difficulte, miner)
+        self.ajoutLog(miner,index,reward)
         return nb
             
+    def ajoutLog(self,miner,index,reward):
+        minerInfo = {
+            "Miner" : miner,
+            "Index" : index,
+            "Reward" : reward,
+        }
+        with open("./Json/logMineur.json", 'a') as file:
+            json.dump(minerInfo, file, indent=4)
+        
     def getLastBlock(self):
         return self.bc[-1]
     
@@ -101,6 +120,17 @@ class Blockchain:
                 break
         return result
     
-    #ajouter un affichage avec un json TODO @ROBIN
+    def to_json(self,fileName):
+        blockchain_json = {
+            "nbBlock": self.nbBlock,
+            "difficulte": self.difficulte,
+            "masse_monetaire": self.masse_monetaire,
+            "masse_jeton": self.masse_jeton
+        }
+        with open(fileName, 'w') as file:
+            json.dump(blockchain_json, file, indent=4)
+        for block in self.bc:
+            block.to_json(fileName)
+    
     
     
