@@ -10,7 +10,7 @@ class Wallet:
         solde = 0
         for utxo in self.utxolist:
             if utxo.getOwner() == self.prenom:
-                solde += 1
+                solde += utxo.getMontant()
         return solde
     
     def getSoldeTotal(self):

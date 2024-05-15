@@ -1,16 +1,20 @@
-
+from hashlib import sha256
 #TODO @EVA
 
 class TxInput:
-    def __init__(self, hash, outIndex, owner, montantEntree, comment): #On ne traite pas les verrouillages de transaction dans ce projet mais ça reste une partie importante de la sécurité!
+    def __init__(self, outIndex, owner, montantEntree, comment): #On ne traite pas les verrouillages de transaction dans ce projet mais ça reste une partie importante de la sécurité!
         #self.previousTxHash = ""
         #self.previousTxIndex = 0 
         #self.hauteur = hauteur #je ne sais pas trop à quoi ça sert...
-        self.hash = hash
         self.owner = owner
         self.outIndex = outIndex
         self.montantEntree = montantEntree
         self.comment = comment
+        self.hash = self.calcul_hash()
+
+    def calcul_hash(self):
+        TxIn_string = str(self.outIndex)+str(self.montantEntree)+str(self.owner)+str(self.comment)
+        return sha256(TxIn_string.encode()).hexdigest()
 
     def printTxInput(self):
         print(f"--- Input List ---")

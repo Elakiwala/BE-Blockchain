@@ -2,11 +2,11 @@ from hashlib import sha256
 #TODO @EVA
 
 class TxOutPut:
-    def __init__(self,outIndex, hash, owner, montantSortie):
+    def __init__(self,outIndex, owner, montantSortie):
         self.montantSortie = montantSortie
         self.owner = owner
         self.outIndex = outIndex
-        self.hash = hash
+        self.hash = self.calcul_hash()
 
     def printTxOutput(self):
         print(f"--- Output List ---")
@@ -16,7 +16,7 @@ class TxOutPut:
         print(f"Montant : ", self.montantSortie)
 
     def calcul_hash(self):
-        TxOut_string = str(self.outIndex)+str(self.montantSortie)
+        TxOut_string = str(self.outIndex)+str(self.montantSortie)+str(self.owner)
         return sha256(TxOut_string.encode()).hexdigest()
     
     def getOwner(self):
