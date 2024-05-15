@@ -57,14 +57,13 @@ class Transaction:
             montantInput += Inputlist[i].getMontant()
         return montantInput - montantOutput
     
-    def voteTx(self, UTXOlist, user, dest, montant, fraisPourcentage):
+    def voteTx(self, UTXOlist, user, dest):
+        montant = 1
         UTXOlistIn = []
         hashSourceTx = ""
         change = 0
         montantEntree = 0
         sommeInputs = 0
-
-        fees = montant * fraisPourcentage/100
 
     #On chercher toutes les utxos qui peuvent être utilisé pour justifier la source (Donc si je comprends bien, les utilisateurs ne possèdent pas réellement d'UTXO)
     #Puisque tous les votants ont le même nombre d'utxo alors la boucle va toujours s'arrêter à 1 (normalement, ou bien à 2 puisqu'il y a les frais en plus...)
@@ -73,9 +72,8 @@ class Transaction:
             if utxo.getOwner() == user:
                 sommeInputs += utxo.getMontant()
                 UTXOlistIn.append(utxo)
-                if sommeInputs >= montant + fees: break
         
-        change = sommeInputs - montant - fees
+        change = sommeInputs - montant
 
         for utxo in UTXOlistIn:
                 hashSourceTx = utxo.getHash()

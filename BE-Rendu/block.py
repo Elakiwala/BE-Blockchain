@@ -37,7 +37,7 @@ class Block:
         return self.blockHash
 
     def calcul_hash(self):
-        block_string = str(self.index)+str(self.timestamp)+str(self.transactions)+str(self.previous_hash)+str(self.nonce)+str(self.miner)#+str(self.merkleRoot)
+        block_string = str(self.index)+str(self.timestamp)+str(self.transactions)+str(self.previous_hash)+str(self.nonce)+str(self.miner)+str(self.merkleRoot)
         return sha256(block_string.encode()).hexdigest()
     
     def mineBlock(self, difficulte, miner):
@@ -52,8 +52,12 @@ class Block:
     
     def verifyBlock(self):
         hashControl = self.calcul_hash()
-        if(self.blockHash == hashControl):
+        booleanMerkleTree = self.verifyMerkleTree()
+        if(self.blockHash == hashControl and booleanMerkleTree):
             return True
+        elif not booleanMerkleTree :
+            print(f"Block numero : {self.index} a un mauvais merkkle tree")
+            return False
         else :
             print(f"Block numero : {self.index} est un mauvais block.")
             return False
@@ -63,7 +67,6 @@ class Block:
         if(self.merkleRoot == merkleRootControl):
             return True
         else:
-            print(f"Block numero : {self.index} a un mauvais merkkle tree")
             return False
     
     def merkle_tree(self,tx_list):

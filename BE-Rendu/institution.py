@@ -6,5 +6,5 @@ class Institution:
         def calculCredit(self,nbVotant):
             recompenseMinage = 50
             recompenseVote = 5
-            return nbVotant * recompenseMinage + nbVotant * recompenseVote
+            return nbVotant * recompenseMinage * 2 + nbVotant * recompenseVote
     

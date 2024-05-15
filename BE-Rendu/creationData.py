@@ -23,8 +23,8 @@ def creationVotant(listeCandidats,nombreVotant):
         listeVotant = [faker.first_name() for _ in range(nombreVotant - len(listeVotant))]
         listeVotant = [prenom for prenom in listeVotant if prenom not in listeCandidats]
     votes = []
-    for _ in range(nombreVotant):
-        votant = random.choice(listeVotant)
+    for nomVotant in listeVotant:
+        votant = nomVotant
         candidat = random.choice(listeCandidats)
         votes.append((votant, candidat))
     file_name = "./dataCandidats/votes.txt"
@@ -39,3 +39,4 @@ def creationData(nombreCandidats,nombreVotant):
     listeCandidat = creationCandidats(nombreCandidats)
     creationVotant(listeCandidat,nombreVotant)
    
+creationData(10,50)
