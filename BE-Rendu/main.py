@@ -7,13 +7,19 @@ from txOutPut import TxOutPut
 from institution import Institution
 from wallet import Wallet
 import time as t
+from utilsData import *
+from utils import *
 
 # ---------- VARIABLES GLOBALES ----------
 
+fileVotantName = "./dataCandidats/votants.txt"
+fileCandidatsName = "./dataCandidats/candidats.txt"
+fileVotantHelicopter = "./Json/soldeVotantApresHelicopter.json"
+fileCandidatsHelicopter = "./Json/soldeCandidatApresHelicopter.json"
 nb_votants = 10
 nb_candidats = 3
-listeVotants = #mise a jour creationData
-listeCandidats = #mise a jour creationData
+listeVotants = lire_mots(fileVotantName,nb_votants)
+listeCandidats = lire_mots(fileCandidatsName,nb_candidats)
 Txfifo = [] 
 difficulte = 4
 index = 1
@@ -24,6 +30,9 @@ tempsDeVote = 3
 dureeMax = nb_votants * 3
 initMoney = 1
 
+print(listeCandidats)
+print(listeVotants)
+
 # ---------- 1) MISE EN PLACE ----------
 
 # Création de la blockchain et du wallet
@@ -33,6 +42,15 @@ blockchain = Blockchain(difficulte, rewardMinage)
 
 blockchain.helicopterMoney(listeVotants, initMoney) # Pour tous les votants mettre 1 si le votant veut voter ou -1 si abstention (certainement à faire autrement...)
 
+clear_json_file(fileVotantHelicopter)
+clear_json_file(fileCandidatsHelicopter)
+
+for votant in listeVotants : #fichier json pour voir si tous les candidats on leur jetons et voir si les mineurs on etati recompenser
+    wallet = Wallet(blockchain.utxoList,blockchain.fiatList,votant)
+    wallet.toJson(fileVotantHelicopter)
+for candidats in listeCandidats : #fichier json pour voir si tous les candidats on leur jetons et voir si les mineurs on etati recompenser
+    wallet = Wallet(blockchain.utxoList,blockchain.fiatList,candidats)
+    wallet.toJson(fileCandidatsHelicopter)
 
 # ---------- 2) PHASE DE VOTE ----------
 
@@ -46,7 +64,7 @@ while vote < nb_votants and duree < dureeMax: # tous les votants ont voté ou bi
     dodo = random.randint(0,5)
     t.sleep(dodo)
     duree += dodo
-    votant = random.randint(0, nb_votants - 1)
+    votant = listeVotants[vote] # pour simplifier au debut on les fait voter dans l'ordre
 
     abstention = random.randint(0,10)
     if abstention != 10 :
@@ -58,12 +76,13 @@ while vote < nb_votants and duree < dureeMax: # tous les votants ont voté ou bi
         # Effectuer le vote/transaction
         blockchain.utxoList = tx.voteTx(blockchain.utxoList, listeVotants[votant], listeCandidats[candidat])
     
-    # Un mienur doit faire la vérification du vote
+    # Un mineur doit faire la vérification du vote
     mineur = random.randint(0, nb_votants - 1)
     newBlock = blockchain.makeBlock(index, Txfifo, rewardMinage, listeVotants[mineur])
 
     index += 1
     vote += 1
+    
 
 if vote == nb_votants: print("Fin de la phase de vote. Tous les votants ont voté!")
 if dureeMax <= duree: print("Fin de la phase de vote. Le temps des élections est écoulé!")

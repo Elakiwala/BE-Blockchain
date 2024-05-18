@@ -5,23 +5,43 @@
     "Index": 0,
     "Reward": 50
 }{
-    "Miner": "me",
+    "Miner": "John98",
     "Index": 1,
-    "Reward": 5
+    "Reward": 50
 }{
-    "Miner": "me",
+    "Miner": "John98",
     "Index": 2,
-    "Reward": 5
+    "Reward": 50
 }{
-    "Miner": "me",
+    "Miner": "Frederick4",
     "Index": 3,
-    "Reward": 5
+    "Reward": 50
 }{
-    "Miner": "me",
+    "Miner": "Sara17",
     "Index": 4,
-    "Reward": 5
+    "Reward": 50
 }{
-    "Miner": "me",
+    "Miner": "Frederick4",
     "Index": 5,
-    "Reward": 5
+    "Reward": 50
+}{
+    "Miner": "Sara17",
+    "Index": 6,
+    "Reward": 50
+}{
+    "Miner": "John98",
+    "Index": 7,
+    "Reward": 50
+}{
+    "Miner": "Paul6",
+    "Index": 8,
+    "Reward": 50
+}{
+    "Miner": "Miguel2",
+    "Index": 9,
+    "Reward": 50
+}{
+    "Miner": "Miguel2",
+    "Index": 10,
+    "Reward": 50
 }

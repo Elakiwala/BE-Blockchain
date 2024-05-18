@@ -51,7 +51,7 @@ class Blockchain:
             heliTransactions.insert(0, tx) #add(index:0, tx) est ce que ça correspond à insert(0, tx)?
             self.utxoList.append(tx.Outputlist[0])
             miner = users[random.randint(0,len(users)-1)]
-            nb = self.makeBlock(self, self.nbBlock,heliTransactions,50,miner)
+            nb = self.makeBlock(self.nbBlock,heliTransactions,50,miner)
             self.addBlock(nb)
         
 
@@ -63,7 +63,7 @@ class Blockchain:
         listTransactionsFrais = []
         nbTx = 2
         for i in range(min(nbTx, len(txList))):
-            blockTransactions.append(0, txList[0])
+            blockTransactions.insert(0, txList[0])
             txList.pop()
         
         previousHash = self.getLastBlock().getHash()

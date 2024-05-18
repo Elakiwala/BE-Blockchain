@@ -4,6 +4,8 @@ from hashlib import sha256
 from txInPut import*
 from txOutPut import*
 from wallet import *
+import datetime
+import json
 
 
 # Variables globales
@@ -19,7 +21,7 @@ class Transaction:
         self.user = user
         self.dest = dest
         self.nbJeton = 1
-        self.timestamp = t.time()
+        self.timestamp = datetime.datetime.fromtimestamp(t.time()).strftime('%Y-%m-%d %H:%M:%S')        
         self.comment = comment
         self.nbInputs = nbInputs
         self.nbOutputs = nbOutputs
@@ -125,5 +127,17 @@ class Transaction:
 
 
     def stringify(self):
-        return t.time() + self.nbInputs + self.Inputlist + self.nbOutputs + self.Outputlist + self.comment
+        return str(self.timestamp) + str(self.nbInputs) + str(self.Inputlist) + str(self.nbOutputs) + str(self.Outputlist) + str(self.comment)
+
+    def to_json(self,fileName):
+        tx_json = {
+            "index": self.index,
+            "timestamp": self.timestamp,
+            "comment": self.comment,
+            "user": self.user,
+            "dest": self.dest,
+            "nbJetons": self.nbJeton
+        }
+        with open(fileName, 'a') as file:
+            json.dump(tx_json, file, indent=4)
 
