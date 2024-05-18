@@ -16,7 +16,7 @@ fileVotantName = "./dataCandidats/votants.txt"
 fileCandidatsName = "./dataCandidats/candidats.txt"
 fileVotantHelicopter = "./Json/soldeVotantApresHelicopter.json"
 fileCandidatsHelicopter = "./Json/soldeCandidatApresHelicopter.json"
-nb_votants = 10
+nb_votants = 10 
 nb_candidats = 3
 listeVotants = lire_mots(fileVotantName,nb_votants)
 listeCandidats = lire_mots(fileCandidatsName,nb_candidats)
@@ -69,12 +69,12 @@ while vote < nb_votants and duree < dureeMax: # tous les votants ont voté ou bi
     abstention = random.randint(0,10)
     if abstention != 10 :
         # Choix du candidat pour lequel le votant va voter
-        candidat = random.randint(0, nb_candidats - 1)
-        tx = Transaction(indexT, "vote")
+        idCandidat = random.randint(0, nb_candidats - 1)
+        candidat = listeCandidats[idCandidat]
+        tx = Transaction(indexT, "vote", votant, candidat)
         Txfifo.append(tx)
         indexT += 1
-        # Effectuer le vote/transaction
-        blockchain.utxoList = tx.voteTx(blockchain.utxoList, listeVotants[votant], listeCandidats[candidat])
+        blockchain.utxoList = tx.voteTx(blockchain.utxoList, votant, candidat)
     
     # Un mineur doit faire la vérification du vote
     mineur = random.randint(0, nb_votants - 1)
@@ -84,8 +84,8 @@ while vote < nb_votants and duree < dureeMax: # tous les votants ont voté ou bi
     vote += 1
     
 
-if vote == nb_votants: print("Fin de la phase de vote. Tous les votants ont voté!")
-if dureeMax <= duree: print("Fin de la phase de vote. Le temps des élections est écoulé!")
+#if vote == nb_votants: print("Fin de la phase de vote. Tous les votants ont voté!")
+#if dureeMax <= duree: print("Fin de la phase de vote. Le temps des élections est écoulé!")
 
 
 #------------4) VERIFICATION ---------

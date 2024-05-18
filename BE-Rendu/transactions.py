@@ -53,8 +53,9 @@ class Transaction:
         print(f"Comment : ", self.comment)
 
     def InstitutionTx(self, montant, user):
+        #print("\n INSTITUTION Tx (heli)")
         outTx = TxOutPut(0, user, montant)
-        self.Outputlist.append(outTx)
+        self.Outputlist.insert(0, outTx)
         self.nbInputs = len(Inputlist)
         self.nbOuputs = len(Outputlist)
 
@@ -68,6 +69,7 @@ class Transaction:
         return montantInput - montantOutput
     
     def voteTx(self, UTXOlist, user, dest):
+        #print("\t VOTE TX")
         UTXOlistIn = []
         montant = 1
         hashSourceTx = ""
@@ -82,6 +84,7 @@ class Transaction:
                 sommeInputs += utxo.getMontant()
                 UTXOlistIn.append(utxo)
         change = sommeInputs - montant
+        #print("sommeInput :", sommeInputs, " change :", change)
         for utxo in UTXOlistIn:
                 hashSourceTx = utxo.getHash()
                 montantEntree = utxo.getMontant()
@@ -104,6 +107,8 @@ class Transaction:
         self.Outputlist.append(outChange)
         self.nbInputs = len(self.Inputlist)
         self.nbOutputs = len(self.Outputlist)
+
+        #print("\n User : ", user, "MontantEntree : ", )
 
         UTXOlist.append(Txout)
         UTXOlist.append(outChange)

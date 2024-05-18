@@ -22,6 +22,7 @@ class Wallet:
             solde += utxo.getMontant()
         return solde
 
+
     def updateFiat(self):
         self.credit = 0
         for minage in self.fiatList:
