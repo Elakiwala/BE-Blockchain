@@ -13,5 +13,6 @@ def testblockchain():
     wMe.updateFiat()
     print("wallet creator : ",wCreator.credit)
     print("wallet me : ",wMe.credit)
+    print("Conformite de la blockchain :",bc.verifyBlockchain())
         
 testblockchain()

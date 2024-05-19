@@ -113,15 +113,16 @@ class Blockchain:
         self.nbBlock += 1
     
     def is_valid_proof(self,block):
-        return (block.blockHash.startswith('0' * self.difficulty))
+        return (block.blockHash.startswith('0' * self.difficulte))
     
     def verifyBlockchain(self):
         result = True
         previous_hash = "0"
         for block in self.bc:
-            if not self.is_valid_proof(block) or not block.verifyBlock or previous_hash != block.blockHash:
+            if not self.is_valid_proof(block) or not block.verifyBlock() or previous_hash != block.previous_hash:
                 result = False
                 break
+            previous_hash = block.blockHash
         return result
     
     def to_json(self,fileName):

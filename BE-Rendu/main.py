@@ -9,6 +9,9 @@ from wallet import Wallet
 import time as t
 from utilsData import *
 from utils import *
+from datetime import datetime
+
+#Reste a faire le wallet institution 
 
 # ---------- VARIABLES GLOBALES ----------
 
@@ -16,22 +19,24 @@ fileVotantName = "./dataCandidats/votants.txt"
 fileCandidatsName = "./dataCandidats/candidats.txt"
 fileVotantHelicopter = "./Json/soldeVotantApresHelicopter.json"
 fileCandidatsHelicopter = "./Json/soldeCandidatApresHelicopter.json"
-nb_votants = 10 
+fileVotantVote = "./Json/soldeVotantApresVote.json"
+fileCandidatsVote = "./Json/soldeCandidatApresVote.json"
+fileBlockchain = "./Json/blockchainApresVote.json"
+tauxDabstention = 10
+nb_votants = 10
 nb_candidats = 3
+tempsVoteBool = False
 listeVotants = lire_mots(fileVotantName,nb_votants)
 listeCandidats = lire_mots(fileCandidatsName,nb_candidats)
+listeCandidats.append("blanc")
 Txfifo = [] 
 difficulte = 4
-index = 1
 indexT = 1
 rewardMinage = 50
 rewardVote = 5
 tempsDeVote = 3
 dureeMax = nb_votants * 3
 initMoney = 1
-
-print(listeCandidats)
-print(listeVotants)
 
 # ---------- 1) MISE EN PLACE ----------
 
@@ -57,56 +62,93 @@ for candidats in listeCandidats : #fichier json pour voir si tous les candidats 
 # Transaction des votes des votants vers les candidats
     # Possible pour une certaine durée de vote 
 
-duree = 0
+idVotant = 0
 vote = 0
+startTime = datetime.now()
 
-while vote < nb_votants and duree < dureeMax: # tous les votants ont voté ou bien le temps des élection s'est écoulé
-    dodo = random.randint(0,5)
-    t.sleep(dodo)
-    duree += dodo
-    votant = listeVotants[vote] # pour simplifier au debut on les fait voter dans l'ordre
+while idVotant < nb_votants: # tous les votants ont voté ou bien le temps des élection s'est écoulé
+    if tempsVoteBool :
+        dodo = random.randint(0,5)
+        t.sleep(dodo)
+    currentTime = datetime.now()
+    passedTime = (currentTime - startTime).total_seconds()
+    if passedTime >= dureeMax :
+        print("Le temps est finis")
+        break
+    
+    votant = listeVotants[idVotant] # pour simplifier au debut on les fait voter dans l'ordre
 
-    abstention = random.randint(0,10)
-    if abstention != 10 :
+    abstention = random.randint(0,tauxDabstention)
+    if abstention !=  0:
         # Choix du candidat pour lequel le votant va voter
-        idCandidat = random.randint(0, nb_candidats - 1)
+        idCandidat = random.randint(0, len(listeCandidats) - 1)
         candidat = listeCandidats[idCandidat]
         tx = Transaction(indexT, "vote", votant, candidat)
         Txfifo.append(tx)
         indexT += 1
         blockchain.utxoList = tx.voteTx(blockchain.utxoList, votant, candidat)
+        # Un mineur doit faire la vérification du vote
+        mineur = random.randint(0, nb_votants - 1)
+        newBlock = blockchain.makeBlock(blockchain.nbBlock, Txfifo, rewardMinage, listeVotants[mineur])
+        blockchain.addBlock(newBlock)
+        vote += 1
+    idVotant+= 1
+
+clear_json_file(fileVotantVote)
+clear_json_file(fileCandidatsVote)
+
+for votant in listeVotants : 
+    wallet = Wallet(blockchain.utxoList,blockchain.fiatList,votant)
+    wallet.toJson(fileVotantVote)
+for candidats in listeCandidats :
+    wallet = Wallet(blockchain.utxoList,blockchain.fiatList,candidats)
+    wallet.toJson(fileCandidatsVote)
     
-    # Un mineur doit faire la vérification du vote
-    mineur = random.randint(0, nb_votants - 1)
-    newBlock = blockchain.makeBlock(index, Txfifo, rewardMinage, listeVotants[mineur])
+blockchain.to_json(fileBlockchain)
 
-    index += 1
-    vote += 1
-    
-
-#if vote == nb_votants: print("Fin de la phase de vote. Tous les votants ont voté!")
-#if dureeMax <= duree: print("Fin de la phase de vote. Le temps des élections est écoulé!")
+if vote == nb_votants: print("Fin de la phase de vote. Tous les votants ont voté!")
+else: print("Fin de la phase de vote. Pas tous les votant ont vote!")
 
 
-#------------4) VERIFICATION ---------
-#verification
+#------------3) VERIFICATION ---------
+voteConforme = True
+blockBon = True
+if not blockchain.verifyBlockchain():
+    print("La blockchain n'est pas conforme et le vote n'est donc pas pris en compte.")
+    voteConforme = False
+for bloc in blockchain.bc :
+    if not bloc.verifyBlock():
+        blockBon = False
+        voteConforme = False
+if not blockBon:
+    print("Il y a des problemes avec au moins un block le vote n'est dont pas pris en compte")
 
-# ---------- 3) RESULTATS ----------
+# ---------- 4) RESULTATS ----------
 
-# Il faut afficher le résultat de l'élection et dure qui est le vainqueur
-
-# Affichage des votant ayant voté un candidat, blanc ou abstention
-
-#TODO affichage json transaction votant
-
-# Affichage des candidats et leurs voies et Affichage du gagnant
-
-maxVote = 0
-gagnant = "Candidat..."
-
-
-print(f"Le gagnant des élections est ", gagnant, " avec " " voies !")
-
-
-
-#JSON TODO @Robin
+if voteConforme:
+    resultat = []
+    idGagnant1 = -1
+    idGagnant2 = -1 
+    voteGagnant = 0
+    voteMax = 0
+    nomGagnant = ""
+    for candidats in listeCandidats:
+        wallet = Wallet(blockchain.utxoList,blockchain.fiatList,candidats)
+        resultat.append((candidats,wallet.getSoldeUser()))
+    resultat.sort(key=lambda x: (-x[1], x[0]))
+    if len(resultat) > 0:
+        if resultat[0][0].lower() == "blanc":
+            if len(resultat) > 1:
+                voteGagnant = resultat[1][1]
+                nomGagnant = resultat[1][0]
+            else:
+                nomGagnant = None
+        else:
+            voteGagnant = resultat[0][1]
+            nomGagnant = resultat[0][0]
+    else:
+        nomGagnant = None
+    if nomGagnant == None or vote == 0:
+        print("Il n y a aucun vote pour les candidats")
+    else :
+        print(f"Le gagnant est {nomGagnant} avec {round(voteGagnant/vote*100,2)} % des votes.")

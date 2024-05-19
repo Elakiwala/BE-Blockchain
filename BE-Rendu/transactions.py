@@ -132,7 +132,7 @@ class Transaction:
 
 
     def stringify(self):
-        return str(self.timestamp) + str(self.nbInputs) + str(self.Inputlist) + str(self.nbOutputs) + str(self.Outputlist) + str(self.comment)
+        return str(self.timestamp) + str(self.nbInputs) + str(self.nbOutputs) + str(self.comment)
 
     def to_json(self,fileName):
         tx_json = {
@@ -143,6 +143,5 @@ class Transaction:
             "dest": self.dest,
             "nbJetons": self.nbJeton
         }
-        with open(fileName, 'a') as file:
-            json.dump(tx_json, file, indent=4)
+        return tx_json
 

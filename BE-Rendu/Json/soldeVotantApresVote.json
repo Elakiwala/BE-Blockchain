@@ -1,41 +1,41 @@
 []{
     "name": "Sara17",
-    "jeton": 1,
-    "fiat": 0
+    "jeton": 0,
+    "fiat": 50
 }{
     "name": "Richard33",
-    "jeton": 1,
+    "jeton": 0,
     "fiat": 50
 }{
     "name": "Frederick4",
-    "jeton": 1,
+    "jeton": 0,
     "fiat": 50
 }{
     "name": "Paul6",
-    "jeton": 1,
-    "fiat": 50
+    "jeton": 0,
+    "fiat": 100
 }{
     "name": "Elizabeth34",
-    "jeton": 1,
-    "fiat": 0
+    "jeton": 0,
+    "fiat": 50
 }{
     "name": "Kimberly57",
-    "jeton": 1,
-    "fiat": 50
+    "jeton": 0,
+    "fiat": 100
 }{
     "name": "Miguel2",
-    "jeton": 1,
-    "fiat": 50
+    "jeton": 0,
+    "fiat": 150
 }{
     "name": "John98",
-    "jeton": 1,
-    "fiat": 100
+    "jeton": 0,
+    "fiat": 150
 }{
     "name": "Lisa44",
-    "jeton": 1,
-    "fiat": 100
+    "jeton": 0,
+    "fiat": 150
 }{
     "name": "Tammy32",
-    "jeton": 1,
-    "fiat": 50
+    "jeton": 0,
+    "fiat": 150
 }

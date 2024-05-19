@@ -46,9 +46,6 @@ class Block:
         while self.blockHash[:difficulte] != cible:
             self.nonce += 1
             self.blockHash = self.calcul_hash()
-        print(f"Block Miné!! : {self.blockHash}")
-        print(f"Block numéro : {self.index}")
-        print(f"Nonce = {self.nonce}")
     
     def verifyBlock(self):
         hashControl = self.calcul_hash()
@@ -105,6 +102,7 @@ class Block:
             "previous_hash": self.previous_hash,
             "timestamp": self.timestamp,
             "nbTransactions": self.nbTransactions,
+            "transactions" : [transaction.to_json("test") for transaction in self.transactions],
             "merkleRoot": self.merkleRoot,
             "miner": self.miner,
             "nonce": self.nonce,

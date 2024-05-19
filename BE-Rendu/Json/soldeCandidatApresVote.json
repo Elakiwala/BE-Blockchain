@@ -1,17 +1,17 @@
 []{
     "name": "John",
-    "jeton": 0,
+    "jeton": 1,
     "fiat": 0
 }{
     "name": "Chase",
-    "jeton": 0,
+    "jeton": 4,
     "fiat": 0
 }{
     "name": "Sharon",
-    "jeton": 0,
+    "jeton": 4,
     "fiat": 0
 }{
     "name": "blanc",
-    "jeton": 0,
+    "jeton": 1,
     "fiat": 0
 }
