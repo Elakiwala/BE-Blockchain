@@ -16,7 +16,7 @@ Outputlist = []
 
 class Transaction:
     # 
-    def __init__(self, index, comment, user, dest):
+    def __init__(self, index, comment, user, dest, listeVotant, listeCandidat):
         self.index = index
         self.user = user
         self.dest = dest
@@ -28,6 +28,10 @@ class Transaction:
         self.Inputlist = Inputlist
         self.Outputlist = Outputlist
         self.hash = self.calcul_hash()
+        self.validity = self.validityTx(listeVotant,listeCandidat)
+
+    def validityTx(self, listeVotant,listeCandidat):
+       return self.user == "Creator" or self.user == "Institution" or (self.user in listeVotant and self.dest in listeCandidat)
 
     def calcul_hash(self):
         Tx_string = str(self.index)+str(self.user)+str(self.dest)+str(self.nbJeton)+str(self.timestamp)+str(self.comment)+str(self.nbInputs)+str(self.nbOutputs)+str(self.Inputlist)+str(self.Outputlist)
@@ -58,15 +62,6 @@ class Transaction:
         self.Outputlist.insert(0, outTx)
         self.nbInputs = len(Inputlist)
         self.nbOuputs = len(Outputlist)
-
-    def frais(self):
-        montantInput = 0
-        montantOutput = 0
-        for i in range(len(Outputlist)):
-            montantOutput += Outputlist[i].getMontant()
-        for i in range(len(Inputlist)):
-            montantInput += Inputlist[i].getMontant()
-        return montantInput - montantOutput
     
     def voteTx(self, UTXOlist, user, dest):
         #print("\t VOTE TX")

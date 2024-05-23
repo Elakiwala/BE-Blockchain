@@ -25,7 +25,7 @@ class Blockchain:
             
     def createGenesisBlock(self,reward):
         genesisTransactions = []
-        tx = Transaction(0,"genesis","Creator","Creator")
+        tx = Transaction(0,"genesis","Creator","Creator",[],[])
         tx.InstitutionTx(reward, "Creator")
         self.masse_monetaire += reward
         genesisTransactions.insert(0,tx)
@@ -43,16 +43,27 @@ class Blockchain:
         self.masse_monetaire += montant
         return self.masse_monetaire
 
-    def helicopterMoney(self,users ,montant): #distribution du jeton aux votants de la part de l'institution
+    def helicopterMoney(self,users ,montant,massemonetaire): #distribution du jeton aux votants de la part de l'institution
         for votant in users:
             heliTransactions = []
-            tx = Transaction(1, "helicopter", "Institution", votant)
+            tx = Transaction(1, "helicopter", "Institution", votant,[],[])
             tx.InstitutionTx(montant, votant)
             heliTransactions.insert(0, tx) #add(index:0, tx) est ce que ça correspond à insert(0, tx)?
             self.utxoList.append(tx.Outputlist[0])
             miner = users[random.randint(0,len(users)-1)]
             nb = self.makeBlock(self.nbBlock,heliTransactions,50,miner)
             self.addBlock(nb)
+            i = 0
+            for utxo in self.utxoList:
+                if utxo.getOwner() == "Institution":
+                    nbJeton = self.utxoList[i].montantSortie
+                    self.utxoList.pop(i)
+                i+=1
+            changeInsti = TxOutPut(len(self.utxoList), "Institution", nbJeton-1)
+            self.utxoList.append(changeInsti)
+        self.masse_jeton = len(users)
+        self.masse_monetaire = massemonetaire
+
         
 
     def getUTXOList(self):
@@ -89,10 +100,10 @@ class Blockchain:
         #     for txF in listTransactionsFrais:
         #         blockTransactions.append(txF)
         #     blockTransactions.append(0, tx)
-        self.majMasseMonetaire(reward)
         nb = Block(index, previousHash, blockTransactions, miner)
         nb.mineBlock(self.difficulte, miner)
         self.fiatList.append((miner,reward))
+        self.fiatList.append(("Institution", -reward))
         self.ajoutLog(miner,index,reward)
         return nb
             

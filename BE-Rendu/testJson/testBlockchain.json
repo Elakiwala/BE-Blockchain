@@ -1,0 +1,75 @@
+{
+    "nbBlock": 6,
+    "difficulte": 4,
+    "masse_monetaire": 50,
+    "masse_jeton": 0
+}{
+    "index": 0,
+    "previous_hash": "0",
+    "timestamp": "2024-05-23 16:18:24",
+    "nbTransactions": 1,
+    "transactions": [
+        {
+            "index": 0,
+            "timestamp": "2024-05-23 16:18:24",
+            "comment": "genesis",
+            "user": "Creator",
+            "dest": "Creator",
+            "nbJetons": 1
+        }
+    ],
+    "merkleRoot": "3e63d3080a85e5fce89b100d86a4015a58ba634cfb449feba56e5571ba361d3b",
+    "miner": "Creator",
+    "nonce": 32837,
+    "blockHash": "0000278b979487ebe79b7e9f775107c7fd0bee74890a13f180ced041c125e341"
+}{
+    "index": 1,
+    "previous_hash": "0000278b979487ebe79b7e9f775107c7fd0bee74890a13f180ced041c125e341",
+    "timestamp": "2024-05-23 16:18:24",
+    "nbTransactions": 0,
+    "transactions": [],
+    "merkleRoot": "",
+    "miner": "me",
+    "nonce": 42547,
+    "blockHash": "0000992c0a01a041381e7ac9a34ccb775d958673669595100e7dc2c428553614"
+}{
+    "index": 2,
+    "previous_hash": "0000992c0a01a041381e7ac9a34ccb775d958673669595100e7dc2c428553614",
+    "timestamp": "2024-05-23 16:18:24",
+    "nbTransactions": 0,
+    "transactions": [],
+    "merkleRoot": "",
+    "miner": "me",
+    "nonce": 21824,
+    "blockHash": "0000d173d2ca79f24dab62cdf71e3568a84e0eedb277914efb0fb553ad97e63f"
+}{
+    "index": 3,
+    "previous_hash": "0000d173d2ca79f24dab62cdf71e3568a84e0eedb277914efb0fb553ad97e63f",
+    "timestamp": "2024-05-23 16:18:25",
+    "nbTransactions": 0,
+    "transactions": [],
+    "merkleRoot": "",
+    "miner": "me",
+    "nonce": 50776,
+    "blockHash": "000008dc300632ad28abd5e1de322b822afe73bf266679c778a6ef04e04b8b43"
+}{
+    "index": 4,
+    "previous_hash": "000008dc300632ad28abd5e1de322b822afe73bf266679c778a6ef04e04b8b43",
+    "timestamp": "2024-05-23 16:18:25",
+    "nbTransactions": 0,
+    "transactions": [],
+    "merkleRoot": "",
+    "miner": "me",
+    "nonce": 159213,
+    "blockHash": "0000373d179d44d9f8344dd356c3c04dc573142ec475925f95fac2fef3fcf9c9"
+}{
+    "index": 5,
+    "previous_hash": "0000373d179d44d9f8344dd356c3c04dc573142ec475925f95fac2fef3fcf9c9",
+    "timestamp": "2024-05-23 16:18:25",
+    "nbTransactions": 0,
+    "transactions": [],
+    "merkleRoot": "",
+    "miner": "me",
+    "nonce": 867,
+    "blockHash": "0000ab1b27ead9f99b5e3c0a3a657eddd25385be4b36817cb293cd0dfe0bd56d"
+}

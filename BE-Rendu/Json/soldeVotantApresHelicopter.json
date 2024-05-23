@@ -1,7 +1,7 @@
 []{
     "name": "Sara17",
     "jeton": 1,
-    "fiat": 0
+    "fiat": 100
 }{
     "name": "Richard33",
     "jeton": 1,
@@ -13,15 +13,15 @@
 }{
     "name": "Paul6",
     "jeton": 1,
-    "fiat": 50
+    "fiat": 0
 }{
     "name": "Elizabeth34",
     "jeton": 1,
-    "fiat": 0
+    "fiat": 50
 }{
     "name": "Kimberly57",
     "jeton": 1,
-    "fiat": 50
+    "fiat": 0
 }{
     "name": "Miguel2",
     "jeton": 1,
@@ -29,11 +29,11 @@
 }{
     "name": "John98",
     "jeton": 1,
-    "fiat": 100
+    "fiat": 150
 }{
     "name": "Lisa44",
     "jeton": 1,
-    "fiat": 100
+    "fiat": 0
 }{
     "name": "Tammy32",
     "jeton": 1,

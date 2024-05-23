@@ -4,7 +4,7 @@ from blockchain import Blockchain
 from block import Block
 from txInPut import TxInput
 from txOutPut import TxOutPut
-from institution import Institution
+from institution import *
 from wallet import Wallet
 import time as t
 from utilsData import *
@@ -22,6 +22,7 @@ fileCandidatsHelicopter = "./Json/soldeCandidatApresHelicopter.json"
 fileVotantVote = "./Json/soldeVotantApresVote.json"
 fileCandidatsVote = "./Json/soldeCandidatApresVote.json"
 fileBlockchain = "./Json/blockchainApresVote.json"
+fileInstitution = "./Json/institution.json"
 tauxDabstention = 10
 nb_votants = 10
 nb_candidats = 3
@@ -37,15 +38,23 @@ rewardVote = 5
 tempsDeVote = 3
 dureeMax = nb_votants * 3
 initMoney = 1
+txConforme = True
 
 # ---------- 1) MISE EN PLACE ----------
+clear_json_file(fileInstitution)
 
 # Création de la blockchain et du wallet
 blockchain = Blockchain(difficulte, rewardMinage)
+institution = Institution(nb_votants)
+instiInit = TxOutPut(0, "Institution", institution.totalJeton)
+blockchain.utxoList.append(instiInit)
+blockchain.fiatList.append(("Institution", institution.totalCredit))
+walletInstitution = Wallet(blockchain.utxoList,blockchain.fiatList,"Institution")
+walletInstitution.toJson(fileInstitution)
 
 # Helicopter money sur touts les votants
 
-blockchain.helicopterMoney(listeVotants, initMoney) # Pour tous les votants mettre 1 si le votant veut voter ou -1 si abstention (certainement à faire autrement...)
+blockchain.helicopterMoney(listeVotants, initMoney,institution.totalCredit) # Pour tous les votants mettre 1 si le votant veut voter ou -1 si abstention (certainement à faire autrement...)
 
 clear_json_file(fileVotantHelicopter)
 clear_json_file(fileCandidatsHelicopter)
@@ -56,6 +65,7 @@ for votant in listeVotants : #fichier json pour voir si tous les candidats on le
 for candidats in listeCandidats : #fichier json pour voir si tous les candidats on leur jetons et voir si les mineurs on etati recompenser
     wallet = Wallet(blockchain.utxoList,blockchain.fiatList,candidats)
     wallet.toJson(fileCandidatsHelicopter)
+walletInstitution.toJson(fileInstitution)
 
 # ---------- 2) PHASE DE VOTE ----------
 
@@ -83,13 +93,19 @@ while idVotant < nb_votants: # tous les votants ont voté ou bien le temps des �
         # Choix du candidat pour lequel le votant va voter
         idCandidat = random.randint(0, len(listeCandidats) - 1)
         candidat = listeCandidats[idCandidat]
-        tx = Transaction(indexT, "vote", votant, candidat)
+        tx = Transaction(indexT, "vote", votant, candidat,listeVotants, listeCandidats)
+        if not tx.validity :
+            print("Une transactions est illegale on arrete le vote.")
+            txConforme = False
+            break
         Txfifo.append(tx)
         indexT += 1
         blockchain.utxoList = tx.voteTx(blockchain.utxoList, votant, candidat)
         # Un mineur doit faire la vérification du vote
         mineur = random.randint(0, nb_votants - 1)
         newBlock = blockchain.makeBlock(blockchain.nbBlock, Txfifo, rewardMinage, listeVotants[mineur])
+        blockchain.fiatList.append((votant,rewardVote))
+        blockchain.fiatList.append(("Institution",-rewardVote))
         blockchain.addBlock(newBlock)
         vote += 1
     idVotant+= 1
@@ -103,6 +119,7 @@ for votant in listeVotants :
 for candidats in listeCandidats :
     wallet = Wallet(blockchain.utxoList,blockchain.fiatList,candidats)
     wallet.toJson(fileCandidatsVote)
+walletInstitution.toJson(fileInstitution)
     
 blockchain.to_json(fileBlockchain)
 
@@ -111,7 +128,7 @@ else: print("Fin de la phase de vote. Pas tous les votant ont vote!")
 
 
 #------------3) VERIFICATION ---------
-voteConforme = True
+voteConforme = True and txConforme
 blockBon = True
 if not blockchain.verifyBlockchain():
     print("La blockchain n'est pas conforme et le vote n'est donc pas pris en compte.")
