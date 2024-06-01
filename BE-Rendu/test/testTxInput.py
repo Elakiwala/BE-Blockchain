@@ -3,7 +3,6 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 
-#TODO @Eva
 from txInPut import *
 test1 = TxInput(0, "moi", 2, "test1")
 test2 = TxInput(1, "autre", 5, "test2")

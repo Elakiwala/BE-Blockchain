@@ -1,6 +1,6 @@
 []{
     "name": "John",
-    "jeton": 5,
+    "jeton": 2,
     "fiat": 0
 }{
     "name": "Chase",
@@ -8,10 +8,10 @@
     "fiat": 0
 }{
     "name": "Sharon",
-    "jeton": 2,
+    "jeton": 4,
     "fiat": 0
 }{
     "name": "blanc",
-    "jeton": 1,
+    "jeton": 2,
     "fiat": 0
 }

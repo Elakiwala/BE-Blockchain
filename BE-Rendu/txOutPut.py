@@ -1,5 +1,4 @@
 from hashlib import sha256
-#TODO @EVA
 
 class TxOutPut:
     def __init__(self,outIndex, owner, montantSortie):

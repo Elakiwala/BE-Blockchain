@@ -3,8 +3,6 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 
-#TODO @Eva
-import time as t
 from transactions import *
 from txInPut import*
 from txOutPut import*

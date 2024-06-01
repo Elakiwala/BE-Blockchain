@@ -1,5 +1,4 @@
 from faker import Faker
-import random
 
 def creationCandidats(nbCandidats):
     faker = Faker()

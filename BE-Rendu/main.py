@@ -1,8 +1,6 @@
 import random
 from transactions import Transaction
 from blockchain import Blockchain
-from block import Block
-from txInPut import TxInput
 from txOutPut import TxOutPut
 from institution import *
 from wallet import Wallet

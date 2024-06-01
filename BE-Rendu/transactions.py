@@ -1,12 +1,9 @@
 import time as t
 from hashlib import sha256
-#from blockchain import*
 from txInPut import*
 from txOutPut import*
 from wallet import *
 import datetime
-import json
-
 
 # Variables globales
 nbInputs = 0

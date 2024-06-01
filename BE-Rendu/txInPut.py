@@ -1,5 +1,4 @@
 from hashlib import sha256
-#TODO @EVA
 
 class TxInput:
     def __init__(self, outIndex, owner, montantEntree, comment): #On ne traite pas les verrouillages de transaction dans ce projet mais ça reste une partie importante de la sécurité!
